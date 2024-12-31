@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobil cihazlara yönelik tehditler Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question h2 {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .quiz-question ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .quiz-question li {
+      margin-bottom: 10px;
+    }
+
+    #submit, #reset, #home {
+      display: inline-block;
+      margin: 20px 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #submit:hover, #reset:hover, #home:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .correct {
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    input[type="radio"]:disabled + label {
+      cursor: not-allowed;
+    }
+
+    #alert {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Mobil cihazlara yönelik tehditler Quiz</h1>
+    <br><br>
+    <div id="quiz"></div>
+    <button id="submit">Sonuçları Göster</button>
+    <button id="reset" style="display:none;">Sıfırla</button>
+    <a href="quizhome.html" id="home" style="display:none;">Ana Sayfaya Dön</a>
+    <div id="result"></div>
+    <div id="details"></div>
+    <div id="alert"></div>
+  </div>
+  <script>
+    const questions = [
+  {
+    question: "Mobil cihazlarda kötü amaçlı yazılımların hedefi genellikle nedir?",
+    options: [
+      "Kişisel verileri ele geçirmek",
+      "Cihazın pil ömrünü uzatmak",
+      "İnternet bağlantısını hızlandırmak",
+      "Kamera çözünürlüğünü artırmak"
+    ],
+    correct: "Kişisel verileri ele geçirmek"
+  },
+  {
+    question: "Bir mobil cihazın zararlı yazılımla enfekte olduğunu nasıl anlayabilirsiniz?",
+    options: [
+      "Pil ömrünün uzaması",
+      "Ekranın çözünürlüğünün artması",
+      "Cihazın normalden yavaş çalışması",
+      "Uygulamaların daha hızlı çalışması"
+    ],
+    correct: "Cihazın normalden yavaş çalışması"
+  },
+  {
+    question: "Mobil cihazlarda sıklıkla kullanılan bir saldırı yöntemi nedir?",
+    options: [
+      "Sahte uygulama indirme",
+      "Cihazın donanımını yükseltme",
+      "Pil tüketimini azaltma",
+      "Wi-Fi hızını artırma"
+    ],
+    correct: "Sahte uygulama indirme"
+  },
+  {
+    question: "Hangi önlem mobil cihazlardaki kötü amaçlı yazılımlara karşı koruma sağlar?",
+    options: [
+      "Güncel bir antivirüs yazılımı kullanmak",
+      "Her uygulamayı yüklemek",
+      "Wi-Fi paylaşımını etkinleştirmek",
+      "Tüm bağlantılara otomatik izin vermek"
+    ],
+    correct: "Güncel bir antivirüs yazılımı kullanmak"
+  },
+  {
+    question: "Bir mobil cihazda kötü amaçlı yazılımın varlığını gösteren bir işaret nedir?",
+    options: [
+      "Cihazın pil ömrünün uzaması",
+      "Uygulamaların daha hızlı yüklenmesi",
+      "Ekran parlaklığının azalması",
+      "Beklenmedik veri kullanımı artışı"
+    ],
+    correct: "Beklenmedik veri kullanımı artışı"
+  },
+  {
+    question: "Mobil cihazlardaki kötü amaçlı yazılımlara karşı hangi yöntem en etkili korunmadır?",
+    options: [
+      "Tüm uygulamaları yüklemek",
+      "Kişisel bilgileri herkesle paylaşmak",
+      "Güvenilir kaynaklardan uygulama indirmek",
+      "Mobil veriyi sürekli açık bırakmak"
+    ],
+    correct: "Güvenilir kaynaklardan uygulama indirmek"
+  },
+  {
+    question: "Hangi saldırı mobil cihazları hedef alabilir?",
+    options: [
+      "Cihazın ekranının temizlenmesi",
+      "Pil tüketiminin düşmesi",
+      "Casus yazılım (Spyware) yüklenmesi",
+      "Wi-Fi bağlantısının hızlanması"
+    ],
+    correct: "Casus yazılım (Spyware) yüklenmesi"
+  },
+  {
+    question: "Mobil cihazlarda bir phishing saldırısının işareti nedir?",
+    options: [
+      "Uygulamaların güncellenmesi",
+      "Şüpheli bağlantılar içeren SMS veya e-posta",
+      "Pil kullanımının azalması",
+      "Cihazın sıcaklığının düşmesi"
+    ],
+    correct: "Şüpheli bağlantılar içeren SMS veya e-posta"
+  },
+  {
+    question: "Mobil cihazlarda kötü amaçlı yazılımlar hangi yol üzerinden bulaşabilir?",
+    options: [
+      "Sahte bir bağlantıya tıklama",
+      "Cihazın donanımını değiştirme",
+      "Pil tasarrufu modu etkinleştirme",
+      "Ekran parlaklığını artırma"
+    ],
+    correct: "Sahte bir bağlantıya tıklama"
+  },
+  {
+    question: "Mobil cihazlarda kötü amaçlı yazılımlar nasıl engellenebilir?",
+    options: [
+      "Herhangi bir kaynaktan uygulama indirmek",
+      "Mobil veri kullanımını artırmak",
+      "Cihazı fabrika ayarlarına döndürmek",
+      "Yalnızca resmi uygulama mağazalarını kullanmak",
+    ],
+    correct: "Yalnızca resmi uygulama mağazalarını kullanmak"
+  }
+];
+
+    const quizDiv = document.getElementById("quiz");
+
+    // Soruları dinamik olarak oluştur
+    questions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("quiz-question");
+
+      const questionTitle = document.createElement("h2");
+      questionTitle.innerText = `${index + 1}. ${q.question}`;
+      questionDiv.appendChild(questionTitle);
+
+      const optionsList = document.createElement("ul");
+      q.options.forEach(option => {
+        const listItem = document.createElement("li");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `q${index}`;
+        input.value = option;
+
+        const label = document.createElement("label");
+        label.innerText = option;
+
+        listItem.appendChild(input);
+        listItem.appendChild(label);
+        optionsList.appendChild(listItem);
+      });
+
+      questionDiv.appendChild(optionsList);
+      quizDiv.appendChild(questionDiv);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const alertDiv = document.getElementById("alert");
+      let allAnswered = true;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        if (!selectedOption) {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alertDiv.innerText = "Lütfen tüm soruları cevaplayın.";
+        return;
+      }
+
+      alertDiv.innerText = ""; // Uyarıyı temizle
+
+      let score = 0;
+      let incorrectCount = 0;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        const options = document.querySelectorAll(`input[name="q${index}"]`);
+
+        options.forEach(option => {
+          const label = option.nextElementSibling;
+          option.disabled = true; // Cevapların değiştirilememesi için
+          if (option.value === q.correct) {
+            label.classList.add("correct");
+          } else if (selectedOption && option === selectedOption) {
+            label.classList.add("incorrect");
+          }
+        });
+
+        if (selectedOption && selectedOption.value === q.correct) {
+          score++;
+        } else {
+          incorrectCount++;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = `Sonuç: ${score}/${questions.length} doğru cevap.`;
+
+      const detailsDiv = document.getElementById("details");
+      detailsDiv.innerText = `${score} doğru, ${incorrectCount} yanlış.`;
+
+      document.getElementById("submit").style.display = "none";
+      document.getElementById("reset").style.display = "inline-block";
+      document.getElementById("home").style.display = "inline-block";
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

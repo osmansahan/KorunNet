@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fidye Yazılımı(Ransomware) Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question h2 {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .quiz-question ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .quiz-question li {
+      margin-bottom: 10px;
+    }
+
+    #submit, #reset, #home {
+      display: inline-block;
+      margin: 20px 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #submit:hover, #reset:hover, #home:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .correct {
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    input[type="radio"]:disabled + label {
+      cursor: not-allowed;
+    }
+
+    #alert {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Oltalama Quiz</h1>
+    <br><br>
+    <div id="quiz"></div>
+    <button id="submit">Sonuçları Göster</button>
+    <button id="reset" style="display:none;">Sıfırla</button>
+    <a href="quizhome.html" id="home" style="display:none;">Ana Sayfaya Dön</a>
+    <div id="result"></div>
+    <div id="details"></div>
+    <div id="alert"></div>
+  </div>
+  <script>
+    const questions = [
+    {
+      question: "Fidye yazılımı (Ransomware) nedir?",
+      options: [
+        "Bilgisayar sistemlerini hızlandıran bir yazılım",
+        "Dosyaları şifreleyerek erişimi engelleyen bir kötü amaçlı yazılım",
+        "Cihazları virüslerden temizleyen bir araç",
+        "Bilgisayar performansını optimize eden bir yazılım"
+      ],
+      correct: "Dosyaları şifreleyerek erişimi engelleyen bir kötü amaçlı yazılım"
+    },
+    {
+      question: "Fidye yazılımlarının temel amacı nedir?",
+      options: [
+        "Kullanıcının dosyalarını yedeklemek",
+        "Kullanıcıdan para talep etmek",
+        "İnternet bağlantısını hızlandırmak",
+        "Bilgisayarın donanımını analiz etmek"
+      ],
+      correct: "Kullanıcıdan para talep etmek"
+    },
+    {
+      question: "Fidye yazılımı saldırıları genellikle hangi yöntemle yayılır?",
+      options: [
+        "Sahte e-postalar ve ekler üzerinden",
+        "İnternet hız testi yapılarak",
+        "Kullanıcıların sosyal medya hesaplarından",
+        "Fiziksel bir USB bellekle"
+      ],
+      correct: "Sahte e-postalar ve ekler üzerinden"
+    },
+    {
+      question: "Bir fidye yazılımı saldırısından sonra ne olur?",
+      options: [
+        "Bilgisayar otomatik olarak yeniden başlatılır.",
+        "Dosyalar şifrelenir ve şifre çözmek için fidye ödenmesi istenir.",
+        "Cihazda performans artışı gözlemlenir.",
+        "Bilgisayarın depolama alanı genişler."
+      ],
+      correct: "Dosyalar şifrelenir ve şifre çözmek için fidye ödenmesi istenir."
+    },
+    {
+      question: "Fidye yazılımından korunmak için hangi önlem alınabilir?",
+      options: [
+        "Güncel antivirüs yazılımı kullanmak",
+        "Bilinmeyen e-posta eklerini açmak",
+        "Şüpheli bağlantılara tıklamak",
+        "Kişisel bilgileri paylaşmak"
+      ],
+      correct: "Güncel antivirüs yazılımı kullanmak"
+    },
+    {
+      question: "Fidye yazılımı bulaşmış bir bilgisayarda hangi uyarı alınabilir?",
+      options: [
+        "Dosyalarınız şifrelendi. Şifreyi almak için fidye ödeyin.",
+        "Bilgisayarınız hızlandırıldı, lütfen yeniden başlatın.",
+        "Tüm dosyalar silindi. Cihazınızı yedekleyin.",
+        "Cihazınızda virüs bulunamadı."
+      ],
+      correct: "Dosyalarınız şifrelendi. Şifreyi almak için fidye ödeyin."
+    },
+    {
+      question: "Fidye yazılımları hangi tür dosyaları genellikle hedef alır?",
+      options: [
+        "Fotoğraflar, belgeler ve videolar",
+        "Sistem dosyaları",
+        "Oyun dosyaları",
+        "Web tarayıcısı geçmişi"
+      ],
+      correct: "Fotoğraflar, belgeler ve videolar"
+    },
+    {
+      question: "Fidye yazılımı saldırısına karşı en iyi savunma nedir?",
+      options: [
+        "Önemli dosyaların yedeklenmesi",
+        "Tüm e-posta eklerini açmak",
+        "Bilgisayarı formatlamak",
+        "Şüpheli bağlantılara tıklamak"
+      ],
+      correct: "Önemli dosyaların yedeklenmesi"
+    },
+    {
+      question: "Fidye yazılımı saldırısından sonra fidye ödenirse ne olur?",
+      options: [
+        "Dosyaların geri alınacağı garanti edilmez.",
+        "Fidye yazılımı kendini bilgisayardan kaldırır.",
+        "Antivirüs yazılımı otomatik olarak fidyeyi öder.",
+        "Bilgisayar donanımı yükseltilir."
+      ],
+      correct: "Dosyaların geri alınacağı garanti edilmez."
+    },
+    {
+      question: "Fidye yazılımlarının hedef aldığı en yaygın kullanıcı grubu hangisidir?",
+      options: [
+        "Ev kullanıcıları ve küçük işletmeler",
+        "Sadece hükümetler",
+        "Bilgisayar oyunları meraklıları",
+        "Bilgisayar mühendisleri"
+      ],
+      correct: "Ev kullanıcıları ve küçük işletmeler"
+    }
+  ];
+
+    const quizDiv = document.getElementById("quiz");
+
+    // Soruları dinamik olarak oluştur
+    questions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("quiz-question");
+
+      const questionTitle = document.createElement("h2");
+      questionTitle.innerText = `${index + 1}. ${q.question}`;
+      questionDiv.appendChild(questionTitle);
+
+      const optionsList = document.createElement("ul");
+      q.options.forEach(option => {
+        const listItem = document.createElement("li");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `q${index}`;
+        input.value = option;
+
+        const label = document.createElement("label");
+        label.innerText = option;
+
+        listItem.appendChild(input);
+        listItem.appendChild(label);
+        optionsList.appendChild(listItem);
+      });
+
+      questionDiv.appendChild(optionsList);
+      quizDiv.appendChild(questionDiv);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const alertDiv = document.getElementById("alert");
+      let allAnswered = true;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        if (!selectedOption) {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alertDiv.innerText = "Lütfen tüm soruları cevaplayın.";
+        return;
+      }
+
+      alertDiv.innerText = ""; // Uyarıyı temizle
+
+      let score = 0;
+      let incorrectCount = 0;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        const options = document.querySelectorAll(`input[name="q${index}"]`);
+
+        options.forEach(option => {
+          const label = option.nextElementSibling;
+          option.disabled = true; // Cevapların değiştirilememesi için
+          if (option.value === q.correct) {
+            label.classList.add("correct");
+          } else if (selectedOption && option === selectedOption) {
+            label.classList.add("incorrect");
+          }
+        });
+
+        if (selectedOption && selectedOption.value === q.correct) {
+          score++;
+        } else {
+          incorrectCount++;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = `Sonuç: ${score}/${questions.length} doğru cevap.`;
+
+      const detailsDiv = document.getElementById("details");
+      detailsDiv.innerText = `${score} doğru, ${incorrectCount} yanlış.`;
+
+      document.getElementById("submit").style.display = "none";
+      document.getElementById("reset").style.display = "inline-block";
+      document.getElementById("home").style.display = "inline-block";
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

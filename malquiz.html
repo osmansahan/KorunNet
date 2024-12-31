@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kötü Amaçlı Yazılım(Malware) Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question h2 {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .quiz-question ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .quiz-question li {
+      margin-bottom: 10px;
+    }
+
+    #submit, #reset, #home {
+      display: inline-block;
+      margin: 20px 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #submit:hover, #reset:hover, #home:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .correct {
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    input[type="radio"]:disabled + label {
+      cursor: not-allowed;
+    }
+
+    #alert {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Oltalama Quiz</h1>
+    <br><br>
+    <div id="quiz"></div>
+    <button id="submit">Sonuçları Göster</button>
+    <button id="reset" style="display:none;">Sıfırla</button>
+    <a href="quizhome.html" id="home" style="display:none;">Ana Sayfaya Dön</a>
+    <div id="result"></div>
+    <div id="details"></div>
+    <div id="alert"></div>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Kötü amaçlı yazılım (Malware) nedir?",
+        options: [
+          "Bilgisayarı optimize eden bir yazılım",
+          "Bilgisayara zarar vermek veya bilgileri çalmak amacıyla tasarlanmış yazılım",
+          "Sistemi hızlandıran bir araç",
+          "Cihazlara güvenlik ekleyen bir program"
+        ],
+        correct: "Bilgisayara zarar vermek veya bilgileri çalmak amacıyla tasarlanmış yazılım"
+      },
+      {
+        question: "Kötü amaçlı yazılımın yayılmasında en sık kullanılan yöntem nedir?",
+        options: [
+          "E-posta ekleri ve sahte bağlantılar",
+          "Donanım yükseltme araçları",
+          "Tarayıcı hızlandırıcı eklentiler",
+          "Oyun yükleme yazılımları"
+        ],
+        correct: "E-posta ekleri ve sahte bağlantılar"
+      },
+      {
+        question: "Kötü amaçlı yazılımın türlerinden biri olan 'Truva Atı (Trojan)' nasıl çalışır?",
+        options: [
+          "Sistem performansını artırır.",
+          "Kullanıcıya yararlı gibi görünen, ancak zararlı kod içeren bir yazılım olarak çalışır.",
+          "Dosyaları şifreleyerek erişimi engeller.",
+          "Bilgisayara güvenlik duvarı ekler."
+        ],
+        correct: "Kullanıcıya yararlı gibi görünen, ancak zararlı kod içeren bir yazılım olarak çalışır."
+      },
+      {
+        question: "Bir bilgisayarın kötü amaçlı yazılımla enfekte olduğunu gösteren işaretlerden biri nedir?",
+        options: [
+          "Bilgisayar normalden daha yavaş çalışır.",
+          "Sistemin çalışması hızlanır.",
+          "Yeni dosyalar otomatik olarak eklenir.",
+          "Ekranda sürekli açılan reklamlar görülmez."
+        ],
+        correct: "Bilgisayar normalden daha yavaş çalışır."
+      },
+      {
+        question: "Casus yazılım (Spyware) hangi amaçla kullanılır?",
+        options: [
+          "Kullanıcıyı izlemek ve bilgilerini çalmak",
+          "Bilgisayarın depolama kapasitesini artırmak",
+          "Bilgisayar hızını optimize etmek",
+          "Güvenlik açıklarını gidermek"
+        ],
+        correct: "Kullanıcıyı izlemek ve bilgilerini çalmak"
+      },
+      {
+        question: "Ransomware ile Malware arasındaki temel fark nedir?",
+        options: [
+          "Ransomware dosyaları şifreler ve fidye talep ederken, Malware genel bir zararlı yazılım türüdür.",
+          "Malware sadece sistemleri hızlandırır.",
+          "Ransomware yalnızca mobil cihazlara bulaşır.",
+          "Malware yalnızca oyun dosyalarını etkiler."
+        ],
+        correct: "Ransomware dosyaları şifreler ve fidye talep ederken, Malware genel bir zararlı yazılım türüdür."
+      },
+      {
+        question: "Kötü amaçlı yazılımlardan korunmanın en etkili yolu nedir?",
+        options: [
+          "Güncel bir antivirüs yazılımı kullanmak",
+          "Her e-posta ekini açmak",
+          "Sadece bilinen bağlantılara tıklamak",
+          "Yedekleme yapmamak"
+        ],
+        correct: "Güncel bir antivirüs yazılımı kullanmak"
+      },
+      {
+        question: "Keylogger nedir?",
+        options: [
+          "Kullanıcının klavye girişlerini kaydeden bir kötü amaçlı yazılım",
+          "Bilgisayarın hızını artıran bir uygulama",
+          "Sistemi yedekleyen bir yazılım",
+          "Güvenlik duvarı ekleyen bir araç"
+        ],
+        correct: "Kullanıcının klavye girişlerini kaydeden bir kötü amaçlı yazılım"
+      },
+      {
+        question: "Kötü amaçlı yazılım bulaşmış bir cihazda hangi davranış gözlemlenir?",
+        options: [
+          "İstenmeyen reklamlar ve pop-up'lar görünür.",
+          "Bilgisayar daha hızlı çalışır.",
+          "Antivirüs programı kendiliğinden devre dışı kalmaz.",
+          "Yalnızca internet hızında artış olur."
+        ],
+        correct: "İstenmeyen reklamlar ve pop-up'lar görünür."
+      },
+      {
+        question: "Kötü amaçlı yazılım saldırılarının hedef aldığı en yaygın cihazlar hangileridir?",
+        options: [
+          "Bilgisayarlar ve mobil cihazlar",
+          "Sadece oyun konsolları",
+          "Fiziksel donanım cihazları",
+          "Yalnızca tarayıcı yazılımları"
+        ],
+        correct: "Bilgisayarlar ve mobil cihazlar"
+      }
+    ];
+
+    const quizDiv = document.getElementById("quiz");
+
+    // Soruları dinamik olarak oluştur
+    questions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("quiz-question");
+
+      const questionTitle = document.createElement("h2");
+      questionTitle.innerText = `${index + 1}. ${q.question}`;
+      questionDiv.appendChild(questionTitle);
+
+      const optionsList = document.createElement("ul");
+      q.options.forEach(option => {
+        const listItem = document.createElement("li");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `q${index}`;
+        input.value = option;
+
+        const label = document.createElement("label");
+        label.innerText = option;
+
+        listItem.appendChild(input);
+        listItem.appendChild(label);
+        optionsList.appendChild(listItem);
+      });
+
+      questionDiv.appendChild(optionsList);
+      quizDiv.appendChild(questionDiv);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const alertDiv = document.getElementById("alert");
+      let allAnswered = true;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        if (!selectedOption) {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alertDiv.innerText = "Lütfen tüm soruları cevaplayın.";
+        return;
+      }
+
+      alertDiv.innerText = ""; // Uyarıyı temizle
+
+      let score = 0;
+      let incorrectCount = 0;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        const options = document.querySelectorAll(`input[name="q${index}"]`);
+
+        options.forEach(option => {
+          const label = option.nextElementSibling;
+          option.disabled = true; // Cevapların değiştirilememesi için
+          if (option.value === q.correct) {
+            label.classList.add("correct");
+          } else if (selectedOption && option === selectedOption) {
+            label.classList.add("incorrect");
+          }
+        });
+
+        if (selectedOption && selectedOption.value === q.correct) {
+          score++;
+        } else {
+          incorrectCount++;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = `Sonuç: ${score}/${questions.length} doğru cevap.`;
+
+      const detailsDiv = document.getElementById("details");
+      detailsDiv.innerText = `${score} doğru, ${incorrectCount} yanlış.`;
+
+      document.getElementById("submit").style.display = "none";
+      document.getElementById("reset").style.display = "inline-block";
+      document.getElementById("home").style.display = "inline-block";
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

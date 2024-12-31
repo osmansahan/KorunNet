@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kimlik Hırsızlığı Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question h2 {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .quiz-question ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .quiz-question li {
+      margin-bottom: 10px;
+    }
+
+    #submit, #reset, #home {
+      display: inline-block;
+      margin: 20px 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #submit:hover, #reset:hover, #home:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .correct {
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    input[type="radio"]:disabled + label {
+      cursor: not-allowed;
+    }
+
+    #alert {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Kimlik Hırsızlığı Quiz</h1>
+    <br><br>
+    <div id="quiz"></div>
+    <button id="submit">Sonuçları Göster</button>
+    <button id="reset" style="display:none;">Sıfırla</button>
+    <a href="quizhome.html" id="home" style="display:none;">Ana Sayfaya Dön</a>
+    <div id="result"></div>
+    <div id="details"></div>
+    <div id="alert"></div>
+  </div>
+  <script>
+    const questions = [
+      {
+        question: "Kimlik hırsızlığı nedir?",
+        options: [
+          "Başka bir kişinin kimlik bilgilerini izinsiz kullanma",
+          "Kredi kartı başvurusu yapma",
+          "İnternet bağlantısını hızlandırma",
+          "Yeni bir hesap oluşturma"
+        ],
+        correct: "Başka bir kişinin kimlik bilgilerini izinsiz kullanma"
+      },
+      {
+        question: "Kimlik hırsızları genellikle hangi bilgilere erişmek ister?",
+        options: [
+          "Telefon marka bilgisi",
+          "Bilgisayarın IP adresi",
+          "T.C. kimlik numarası ve banka bilgileri",
+
+          "Ekran çözünürlüğü"
+        ],
+        correct: "T.C. kimlik numarası ve banka bilgileri"
+      },
+      {
+        question: "Kimlik hırsızlığından korunmanın en etkili yollarından biri nedir?",
+        options: [
+          "Kişisel bilgileri sosyal medyada paylaşmak",
+          "Her web sitesine kayıt olmak",
+          "Her gelen e-postaya yanıt vermek",
+          "Hassas bilgileri kimseyle paylaşmamak",
+
+        ],
+        correct: "Hassas bilgileri kimseyle paylaşmamak"
+      },
+      {
+        question: "Kimlik hırsızlığının yaygın bir yöntemi nedir?",
+        options: [
+          "Bilgisayar donanımını yükseltme",
+          "Kablosuz bağlantı hızını artırma",
+          "Mobil veri kullanımını kapatma",
+          "Phishing saldırıları",
+
+        ],
+        correct: "Phishing saldırıları"
+      },
+      {
+        question: "Kimlik hırsızlığının belirtilerinden biri nedir?",
+        options: [
+          "Telefonun şarjının uzun dayanması",
+          "E-posta gelen kutusunun boş olması",
+          "Ekstrede tanınmayan harcamalar",
+
+          "Tarayıcı geçmişinin temiz olması"
+        ],
+        correct: "Ekstrede tanınmayan harcamalar"
+      },
+      {
+        question: "Kimlik hırsızlığına karşı alınabilecek bir önlem nedir?",
+        options: [
+          "Tüm sosyal medya hesaplarını açık bırakmak",
+          "Şüpheli bağlantılara tıklamaktan kaçınmak",
+
+          "Bilgisayarı sürekli açık bırakmak",
+          "Hassas bilgileri herkese açık bir şekilde paylaşmak"
+        ],
+        correct: "Şüpheli bağlantılara tıklamaktan kaçınmak"
+      },
+      {
+        question: "Kimlik hırsızlığını önlemek için hangi tür şifreler tercih edilmelidir?",
+        options: [
+          "Güçlü ve karmaşık şifreler",
+          "Kısa ve tahmin edilebilir şifreler",
+          "Herkesin bildiği genel şifreler",
+          "Doğum tarihi veya telefon numarası"
+        ],
+        correct: "Güçlü ve karmaşık şifreler"
+      },
+      {
+        question: "Kimlik hırsızlığı durumunda ne yapılmalıdır?",
+        options: [
+          "Yetkili birimlere ve bankalara başvurmak",
+          "Kişisel bilgileri daha fazla paylaşmak",
+          "Kimlik bilgilerini sosyal medyada yayınlamak",
+          "Hiçbir şey yapmamak"
+        ],
+        correct: "Yetkili birimlere ve bankalara başvurmak"
+      },
+      {
+        question: "Kimlik hırsızlığını kolaylaştıran bir davranış nedir?",
+        options: [
+          "Bilgileri sadece resmi sitelere kaydetmek",
+          "Şifreleri güvenli bir yerde saklamak",
+          "Hassas bilgileri korumak",
+          "Kişisel bilgileri güvensiz platformlarda paylaşmak",
+        ],
+        correct: "Kişisel bilgileri güvensiz platformlarda paylaşmak"
+      },
+      {
+        question: "Kimlik hırsızlığına karşı alınabilecek en önemli önlem nedir?",
+        options: [
+          "Tüm bilgileri herkesle paylaşmak",
+          "Kişisel bilgileri kopyalamak",
+          "Hassas bilgileri düzenli olarak koruma altına almak",
+
+          "Kimlik belgelerini açık alanda bırakmak"
+        ],
+        correct: "Hassas bilgileri düzenli olarak koruma altına almak"
+      }
+    ];
+
+    const quizDiv = document.getElementById("quiz");
+
+    // Soruları dinamik olarak oluştur
+    questions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("quiz-question");
+
+      const questionTitle = document.createElement("h2");
+      questionTitle.innerText = `${index + 1}. ${q.question}`;
+      questionDiv.appendChild(questionTitle);
+
+      const optionsList = document.createElement("ul");
+      q.options.forEach(option => {
+        const listItem = document.createElement("li");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `q${index}`;
+        input.value = option;
+
+        const label = document.createElement("label");
+        label.innerText = option;
+
+        listItem.appendChild(input);
+        listItem.appendChild(label);
+        optionsList.appendChild(listItem);
+      });
+
+      questionDiv.appendChild(optionsList);
+      quizDiv.appendChild(questionDiv);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const alertDiv = document.getElementById("alert");
+      let allAnswered = true;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        if (!selectedOption) {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alertDiv.innerText = "Lütfen tüm soruları cevaplayın.";
+        return;
+      }
+
+      alertDiv.innerText = ""; // Uyarıyı temizle
+
+      let score = 0;
+      let incorrectCount = 0;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        const options = document.querySelectorAll(`input[name="q${index}"]`);
+
+        options.forEach(option => {
+          const label = option.nextElementSibling;
+          option.disabled = true; // Cevapların değiştirilememesi için
+          if (option.value === q.correct) {
+            label.classList.add("correct");
+          } else if (selectedOption && option === selectedOption) {
+            label.classList.add("incorrect");
+          }
+        });
+
+        if (selectedOption && selectedOption.value === q.correct) {
+          score++;
+        } else {
+          incorrectCount++;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = `Sonuç: ${score}/${questions.length} doğru cevap.`;
+
+      const detailsDiv = document.getElementById("details");
+      detailsDiv.innerText = `${score} doğru, ${incorrectCount} yanlış.`;
+
+      document.getElementById("submit").style.display = "none";
+      document.getElementById("reset").style.display = "inline-block";
+      document.getElementById("home").style.display = "inline-block";
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>

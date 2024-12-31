@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Halka Açık Wi-Fi Ağları Üzerinden Saldırı Quiz</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0;
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .quiz-question {
+      margin-bottom: 20px;
+    }
+
+    .quiz-question h2 {
+      font-size: 18px;
+      color: #555;
+    }
+
+    .quiz-question ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .quiz-question li {
+      margin-bottom: 10px;
+    }
+
+    #submit, #reset, #home {
+      display: inline-block;
+      margin: 20px 10px;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    #submit:hover, #reset:hover, #home:hover {
+      background-color: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .correct {
+      background-color: #d4edda;
+      color: #155724;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    .incorrect {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-radius: 5px;
+      padding: 5px;
+    }
+
+    input[type="radio"]:disabled + label {
+      cursor: not-allowed;
+    }
+
+    #alert {
+      color: red;
+      text-align: center;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <h1>Halka Açık Wi-Fi Ağları Üzerinden Saldırı Quiz</h1>
+    <br><br>
+    <div id="quiz"></div>
+    <button id="submit">Sonuçları Göster</button>
+    <button id="reset" style="display:none;">Sıfırla</button>
+    <a href="quizhome.html" id="home" style="display:none;">Ana Sayfaya Dön</a>
+    <div id="result"></div>
+    <div id="details"></div>
+    <div id="alert"></div>
+  </div>
+  <script>
+    const questions = [
+    {
+      question: "Halka açık Wi-Fi ağlarına bağlanırken hangi riskle karşılaşabilirsiniz?",
+      options: [
+        "İnternet hızınızın artması",
+        "Kablosuz bağlantınızın kesilmesi",
+        "Kişisel verilerinizin çalınması",
+        "Cihazınızın hızlanması"
+      ],
+      correct: "Kişisel verilerinizin çalınması"
+    },
+    {
+      question: "Halka açık bir Wi-Fi ağına bağlanırken hangi önlem alınmalıdır?",
+      options: [
+        "VPN kullanmak",
+        "Tüm bağlantıları otomatik açmak",
+        "Paylaşılan dosyaları indirmek",
+        "Herkese açık bir cihaz kullanmak"
+      ],
+      correct: "VPN kullanmak"
+    },
+    {
+      question: "Bir halka açık Wi-Fi ağına bağlanıldığında hangi saldırı tipi gerçekleşebilir?",
+      options: [
+        "Fiziksel donanım hacklenmesi",
+        "RAM artırımı",
+        "Cihazın yeniden başlatılması",
+        "Ortadaki adam (Man-in-the-Middle) saldırısı",
+
+      ],
+      correct: "Ortadaki adam (Man-in-the-Middle) saldırısı"
+    },
+    {
+      question: "Halka açık Wi-Fi ağlarında genellikle hangi tür bilgiler hedef alınır?",
+      options: [
+        "Ekran çözünürlüğü",
+        "Kredi kartı bilgileri",
+        "Bilgisayarın RAM boyutu",
+        "Sadece fotoğraf dosyaları"
+      ],
+      correct: "Kredi kartı bilgileri"
+    },
+    {
+      question: "Halka açık bir Wi-Fi ağı kullanırken cihazınızı korumak için ne yapmalısınız?",
+      options: [
+        "Güçlü bir antivirüs programı kullanmak",
+        "Tüm bağlantılara otomatik izin vermek",
+        "Yedekleme işlemlerini devre dışı bırakmak",
+        "Wi-Fi bağlantısını şifrelemek"
+      ],
+      correct: "Güçlü bir antivirüs programı kullanmak"
+    },
+    {
+      question: "Halka açık Wi-Fi ağlarının en büyük güvenlik açığı nedir?",
+      options: [
+        "Şifreleme eksikliği",
+        "Ağ hızının düşük olması",
+        "Ağ kullanımının sınırlı olması",
+        "Bağlantının sürekli kesilmesi"
+      ],
+      correct: "Şifreleme eksikliği"
+    },
+    {
+      question: "Halka açık Wi-Fi ağlarına bağlanırken neden şifreleme önemlidir?",
+      options: [
+        "Veri güvenliğini sağlamak için",
+        "İnternet hızını artırmak için",
+        "Kablosuz bağlantıyı test etmek için",
+        "Bağlantı kesintilerini önlemek için"
+      ],
+      correct: "Veri güvenliğini sağlamak için"
+    },
+    {
+      question: "Halka açık Wi-Fi ağlarında bağlantı güvenliğini artırmak için hangi yöntem kullanılabilir?",
+      options: [
+        "Wi-Fi paylaşımını etkinleştirmek",
+        "Tüm cihazları aynı ağa bağlamak",
+        "Bilgisayarı şifrelememek",
+        "VPN bağlantısı kurmak"
+      ],
+      correct: "VPN bağlantısı kurmak"
+    },
+    {
+      question: "Halka açık Wi-Fi ağı kullanırken hangi davranıştan kaçınılmalıdır?",
+      options: [
+        "Kamuya açık dosyaları taramak",
+        "E-posta kontrolü yapmak",
+        "Hassas bilgileri paylaşmak",
+        "Basit internet taraması gerçekleştirmek"
+      ],
+      correct: "Hassas bilgileri paylaşmak"
+    },
+    {
+      question: "Halka açık bir Wi-Fi ağına bağlandığınızda saldırganların sizi hedef almasını önlemek için ne yapabilirsiniz?",
+      options: [
+        
+        "Her dosyayı paylaşmak",
+        "Paylaşımları devre dışı bırakmak",
+        "Bağlantı paylaşımını etkinleştirmek",
+        "Bilgileri herkese açık hale getirmek"
+      ],
+      correct: "Paylaşımları devre dışı bırakmak"
+    }
+  ];
+
+    const quizDiv = document.getElementById("quiz");
+
+    // Soruları dinamik olarak oluştur
+    questions.forEach((q, index) => {
+      const questionDiv = document.createElement("div");
+      questionDiv.classList.add("quiz-question");
+
+      const questionTitle = document.createElement("h2");
+      questionTitle.innerText = `${index + 1}. ${q.question}`;
+      questionDiv.appendChild(questionTitle);
+
+      const optionsList = document.createElement("ul");
+      q.options.forEach(option => {
+        const listItem = document.createElement("li");
+
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = `q${index}`;
+        input.value = option;
+
+        const label = document.createElement("label");
+        label.innerText = option;
+
+        listItem.appendChild(input);
+        listItem.appendChild(label);
+        optionsList.appendChild(listItem);
+      });
+
+      questionDiv.appendChild(optionsList);
+      quizDiv.appendChild(questionDiv);
+    });
+
+    document.getElementById("submit").addEventListener("click", () => {
+      const alertDiv = document.getElementById("alert");
+      let allAnswered = true;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        if (!selectedOption) {
+          allAnswered = false;
+        }
+      });
+
+      if (!allAnswered) {
+        alertDiv.innerText = "Lütfen tüm soruları cevaplayın.";
+        return;
+      }
+
+      alertDiv.innerText = ""; // Uyarıyı temizle
+
+      let score = 0;
+      let incorrectCount = 0;
+
+      questions.forEach((q, index) => {
+        const selectedOption = document.querySelector(`input[name="q${index}"]:checked`);
+        const options = document.querySelectorAll(`input[name="q${index}"]`);
+
+        options.forEach(option => {
+          const label = option.nextElementSibling;
+          option.disabled = true; // Cevapların değiştirilememesi için
+          if (option.value === q.correct) {
+            label.classList.add("correct");
+          } else if (selectedOption && option === selectedOption) {
+            label.classList.add("incorrect");
+          }
+        });
+
+        if (selectedOption && selectedOption.value === q.correct) {
+          score++;
+        } else {
+          incorrectCount++;
+        }
+      });
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerText = `Sonuç: ${score}/${questions.length} doğru cevap.`;
+
+      const detailsDiv = document.getElementById("details");
+      detailsDiv.innerText = `${score} doğru, ${incorrectCount} yanlış.`;
+
+      document.getElementById("submit").style.display = "none";
+      document.getElementById("reset").style.display = "inline-block";
+      document.getElementById("home").style.display = "inline-block";
+    });
+
+    document.getElementById("reset").addEventListener("click", () => {
+      window.location.reload();
+    });
+  </script>
+</body>
+</html>
